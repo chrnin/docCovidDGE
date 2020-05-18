@@ -18,7 +18,7 @@ def main():
           'contenu': content
         })
   with open('data.json', 'w') as f:
-    json.dump(allQuestions, f)
+    json.dump(allQuestions, f, indent=4)
   
 
 def getArticle(url):
