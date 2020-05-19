@@ -15,7 +15,7 @@ def main():
         allQuestions.append({
           'titre': c['title'],
           'chemin': path[:int(len(path)/2)],
-          'contenu': content
+          'contenu': [c for c in content if c != '']
         })
   with open('data.json', 'w') as f:
     json.dump(allQuestions, f, indent=4)
@@ -39,7 +39,7 @@ def getContentFromArticle(tree):
   return articles
 
 def getPathFromArticle(tree):
-  return [a.encode('utf-8').decode('unicode_escape') for a in tree.xpath("//a[contains(@class, 'ExplanationTop__Crumb')]/text()") if a != '']
+  return [a.encode('utf-8').decode('unicode_escape') for a in tree.xpath("//a[contains(@class, 'ExplanationTop__Crumb')]/text()")]
 
 def getContent():
   with urllib.request.urlopen("https://info-entreprises-covid19.economie.gouv.fr/kb") as response:
