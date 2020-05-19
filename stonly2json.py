@@ -39,7 +39,7 @@ def getContentFromArticle(tree):
   return articles
 
 def getPathFromArticle(tree):
-  return [a.encode('utf-8').decode('unicode_escape') for a in tree.xpath("//a[contains(@class, 'ExplanationTop__Crumb')]/text()")]
+  return [a.encode('utf-8').decode('unicode_escape') for a in tree.xpath("//a[contains(@class, 'ExplanationTop__Crumb')]/text()") if a != '']
 
 def getContent():
   with urllib.request.urlopen("https://info-entreprises-covid19.economie.gouv.fr/kb") as response:
