@@ -32,7 +32,7 @@ jobs:
         export DATASET_ID="5ec3a046c9e9abed50d770a9"
         export RESOURCE="1db5b7f3-712a-4977-820d-c3d33eb6db86"
         curl -H "Accept:application/json" \
-          -H "X-Api-Key:$DATA_GOUV_API_KEY" \
+          -H "X-Api-Key:$DATA_API" \
           -F "file=@data.json" \
           -X POST $API/datasets/$DATASET_ID/resources/$RESOURCE/upload/
     
