@@ -1,0 +1,50 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  schedule:
+  - cron:  '0 6 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install lxml urllib3
+    - name: Run script
+      run: python stonly2json.py
+    - name: Push to data.gouv.fr
+      env:
+        DATA_API: ${{ secrets.DATA_API }} 
+      run: |
+        export API="https://www.data.gouv.fr/api/1"
+        export DATASET_ID="5ec3a046c9e9abed50d770a9"
+        export RESOURCE="1db5b7f3-712a-4977-820d-c3d33eb6db86"
+        curl -H "Accept:application/json" \
+          -H "X-Api-Key:$DATA_API" \
+          -F "file=@data.json" \
+          -X POST $API/datasets/$DATASET_ID/resources/$RESOURCE/upload/
+    - name: Set Git identity
+      run: |
+        git config --global user.email "robot@actions.github"
+        git config --global user.name "robot"
+    - name: Push update to git
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          git add data.json
+          git commit -m "New data at $(date -u +'%Y-%m-%dT%H:%M:%SZ') [skip ci]"
+          git push origin master
+        else
+          echo "No changes";
+        fi   
