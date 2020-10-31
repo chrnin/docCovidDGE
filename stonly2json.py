@@ -33,7 +33,6 @@ def getArticle(url):
 def getContentFromArticle(tree):
   raw = ''.join(tree.xpath("//script[@id='server-app-state']/text()")).encode('utf-8').decode('unicode_escape').replace("undefined",'"undefined"')
   text = raw.encode('raw_unicode_escape')
-  print(repr(text))
   content = json.loads(text)
   articles = []
   for c in content['explanationToDisplay']['contents']:
